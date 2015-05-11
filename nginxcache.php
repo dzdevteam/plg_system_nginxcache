@@ -18,7 +18,8 @@ defined('_JEXEC') or die;
 class PlgSystemNginxCache extends JPlugin
 {
     /**
-     * After app init
+     * Set cookies JSESSION on front-end if logged in
+     * Disable cache if logged in or in back-end
      *
      * @return  void
      *
@@ -28,7 +29,9 @@ class PlgSystemNginxCache extends JPlugin
     {
         $app = JFactory::getApplication();
         $user = JFactory::getUser();
-        if ($app->isAdmin() || !$user->guest) {
+        if ($app->isAdmin()) {
+            $app->allowCache(false);
+        } else if (!$user->guest) {
             $app->allowCache(false);
             $app->input->cookie->set('JSESSION', true);
         } else {
