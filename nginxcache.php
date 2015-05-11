@@ -30,8 +30,10 @@ class PlgSystemNginxCache extends JPlugin
         $user = JFactory::getUser();
         if ($app->isAdmin() || !$user->guest) {
             $app->allowCache(false);
+            $app->input->cookie->set('JSESSION', true);
         } else {
             $app->allowCache(true);
+            $app->input->cookie->set('JSESSION', NULL, time() - 1);
         }
     }
 }
