@@ -33,10 +33,14 @@ class PlgSystemNginxCache extends JPlugin
             $app->allowCache(false);
         } else if (!$user->guest) {
             $app->allowCache(false);
-            $app->input->cookie->set('JSESSION', true);
+            if (!$app->input->cookie->get('JSESSION')) {
+                $app->input->cookie->set('JSESSION', true);
+            }
         } else {
             $app->allowCache(true);
-            $app->input->cookie->set('JSESSION', NULL, time() - 1);
+            if ($app->input->cookie->get('JSESSION')) {
+                $app->input->cookie->set('JSESSION', NULL, time() - 1);
+            }
         }
     }
 }
